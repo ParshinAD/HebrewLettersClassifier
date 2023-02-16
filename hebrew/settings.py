@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drawletters.apps.DrawlettersConfig',
+    'letter_recognize.apps.LetterRecognizeConfig',
 
     'storages',
 ]

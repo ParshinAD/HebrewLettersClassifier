@@ -99,6 +99,7 @@ function saveImg()
 	  console.log(response)
 	  document.getElementById("rec_result").innerHTML = response
 	});
+	clearCanvas();
 
 }
 

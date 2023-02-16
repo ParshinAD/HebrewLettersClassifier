@@ -10,8 +10,8 @@ class Model(object):
   def __init__(self):
   	self.nothing = 0
 
-  def save_image(self, drawn_digit, image):
-  	filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
+  def save_image(self, drawn_letter, image):
+  	filename = 'letter' + str(drawn_letter) + '__' + str(uuid.uuid1()) + '.jpg'
   	with open('tmp/' + 'draw_image.jpg', 'wb') as f:
   	    f.write(image)
 
@@ -19,7 +19,7 @@ class Model(object):
   	AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
   	AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
   	s3 = boto3.resource(service_name='s3', region_name='eu-central-1', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-  	s3.Bucket('hebrewlettersawsbucket').upload_file(Filename='tmp/' + 'draw_image.jpg', Key=f'{drawn_digit}/' + filename)
+  	s3.Bucket('hebrewlettersawsbucket').upload_file(Filename='tmp/' + 'draw_image.jpg', Key=f'{drawn_letter}/' + filename)
 
 #   	conn = S3Connection(AWS_ACCESS_KEY_ID,
 #                                 AWS_SECRET_ACCESS_KEY,

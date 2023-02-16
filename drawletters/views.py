@@ -16,7 +16,6 @@ def main(request):
     context = {
 
     }
-    messages.info(request, 'main view!')
     return HttpResponse(template.render(context, request))
 
 
