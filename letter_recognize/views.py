@@ -3,7 +3,6 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from .functions import predict_on_one_image, one_step_train
 import base64
-import json
 
 
 

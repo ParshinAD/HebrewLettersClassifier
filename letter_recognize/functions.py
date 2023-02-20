@@ -1,4 +1,7 @@
 from .FCC_model import process_image, L_model_forward, L_model_backward, update_parameters
+from .MyCNN import ConvNet1, CNN_predict_on_one_image
+
+import pickle
 from PIL import Image
 import io
 import numpy as np
@@ -10,27 +13,31 @@ def softmax(x):
 
 def predict_on_one_image(image,):
     imageStream = io.BytesIO(image)
-    image = Image.open(imageStream)
-    image = process_image(image)
+    imageStream = Image.open(imageStream)
+    image = process_image(imageStream)
 
     if image is None:
         return {'answer': "Can't predict, when nothing is drawn"}
 
-    image = image.reshape(-1, 1)
+    image_flatten = image.reshape(-1, 1)
 
     # Forward propagation for constant fcc
     const_parameters_fcc = np.load("tmp/parameters.npy", allow_pickle=True)[()]
-    probas_const_fcc, caches = L_model_forward(image, const_parameters_fcc)
+    probas_const_fcc, _ = L_model_forward(image_flatten, const_parameters_fcc)
     # Forward propagation for trainable fcc
     trainable_parametes_fcc = np.load("parameters.npy", allow_pickle=True)[()]
-    probas_train_fcc, caches = L_model_forward(image, trainable_parametes_fcc)
+    probas_train_fcc, _ = L_model_forward(image_flatten, trainable_parametes_fcc)
+    # Forward propagation for constant CNN
+    with open('tmp/model_params_ConvNet1.pickle', 'rb') as f:
+        const_parameters_cnn = pickle.load(f, encoding='latin1')  # dictionary type
+    probas_const_cnn = CNN_predict_on_one_image(imageStream, const_parameters_cnn)
 
-    result = make_answer(probas_const_fcc, probas_train_fcc)
+    result = make_answer(probas_const_fcc, probas_train_fcc, probas_const_cnn)
 
     return result
 
 
-def make_answer(probas_const_fcc, probas_train_fcc):
+def make_answer(probas_const_fcc, probas_train_fcc, probas_const_cnn):
     digit2labels = {0: 'Alef', 1: 'Ayin',  2: 'Bet',  3: 'Chet', 4: 'Dalet',
       5: 'Gimel', 6: 'He', 7: 'Kaf', 8: 'Lamed', 9: 'Mem', 10: 'Nun', 11: 'Pe',
       12: 'Qof', 13: 'Resh', 14: 'Samech', 15: 'Shin', 16: 'Tav', 17: 'Tet',
@@ -39,17 +46,23 @@ def make_answer(probas_const_fcc, probas_train_fcc):
     probas_const_fcc = sorted(enumerate(softmax(probas_const_fcc)), key=lambda x: -x[1])[:3]
     probas_train_fcc = sorted(enumerate(softmax(probas_train_fcc)), key=lambda x: -x[1])[:3]
 
+    probas_const_cnn = probas_const_cnn.reshape([-1, 1])
+    probas_const_cnn = sorted(enumerate(softmax(probas_const_cnn)), key=lambda x: -x[1])[:3]
+
     result = {'fnn': [f'{digit2labels[probas_const_fcc[0][0]]}: {round(float(probas_const_fcc[0][1])*100, 2)}%',
                         f'{digit2labels[probas_const_fcc[1][0]]}: {round(float(probas_const_fcc[1][1])*100, 2)}%;',
                         f'{digit2labels[probas_const_fcc[2][0]]}: {round(float(probas_const_fcc[2][1])*100, 2)}%;',],
             'fnn_t': [f'{digit2labels[probas_train_fcc[0][0]]}: {round(float(probas_train_fcc[0][1])*100, 2)}%',
                         f'{digit2labels[probas_train_fcc[1][0]]}: {round(float(probas_train_fcc[1][1])*100, 2)}%;',
                         f'{digit2labels[probas_train_fcc[2][0]]}: {round(float(probas_train_fcc[2][1])*100, 2)}%;',],
-              'answer': digit2labels[probas_train_fcc[0][0]]}
+            'cnn': [f'{digit2labels[probas_const_cnn[0][0]]}: {round(float(probas_const_cnn[0][1])*100, 2)}%',
+                        f'{digit2labels[probas_const_cnn[1][0]]}: {round(float(probas_const_cnn[1][1])*100, 2)}%;',
+                        f'{digit2labels[probas_const_cnn[2][0]]}: {round(float(probas_const_cnn[2][1])*100, 2)}%;',],
+              'answer': digit2labels[probas_train_fcc[0][0]],}
     return result
 
 
-def one_step_train(image, Y, learning_rate=0.0075):
+def one_step_train(image, Y, learning_rate=0.0025):
     parameters = np.load("parameters.npy", allow_pickle=True)[()]
 
     labels2digit = {'Alef': 0, 'Ayin': 1, 'Bet': 2, 'Chet': 3, 'Dalet': 4,
