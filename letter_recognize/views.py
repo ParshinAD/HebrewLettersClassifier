@@ -29,7 +29,7 @@ def hook2(request):
 def hook3(request):
     if request.method == 'POST':
         image_b64 = request.POST['imageBase64']
-        digit = request.POST['digit']
+        digit = request.POST['letter']
         image_encoded = image_b64.split(',')[1]
         image = base64.decodebytes(image_encoded.encode('utf-8'))
         result = one_step_train(image, digit)

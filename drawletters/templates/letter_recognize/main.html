@@ -18,11 +18,6 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 	<link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
 </head>
 
 <body>
@@ -72,7 +67,7 @@
 										<th>FNN</th>
 										<th>Trained FNN</th>
 										<th>CNN</th>
-										<th>CNN trained</th>
+										<th>Trained CNN</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -105,11 +100,11 @@
 						<span id="question">Is the prediction correct?</span>
 						<button type="button" class="btn btn-default butt" id="yes" onclick="positive_pred()">Yes</button>
 						<button type="button" class="btn btn-default butt" id="no" onclick="negative_pred()">No</button>
-						<button type="button" class="btn btn-default butt" id="not_a_digit" onclick="nothing()">It wasn't a letter</button>
+						<button type="button" class="btn btn-default butt" id="not_a_letter" onclick="nothing()">It wasn't a letter</button>
 					</div>
 					<span id="answer_reaction"> </span>
-					<div id="digit_form" style="display: none;">
-						<select id="digits">
+					<div id="letter_form" style="display: none;">
+						<select id="letters">
 							<option value="Alef">Alef</option>
 							<option value="Bet">Bet</option>
 							<option value="Gimel">Gimel</option>
@@ -133,7 +128,7 @@
 							<option value="Shin">Shin</option>
 							<option value="Tav">Tav</option>
 						</select>
-						<button type="button" class="btn btn-default butt" onclick="submit_correct_digit()">Confirm</button>
+						<button type="button" class="btn btn-default butt" onclick="submit_correct_letter()">Confirm</button>
 					</div>
 				</div>
 
@@ -146,48 +141,14 @@
             <div class="col-md-4">
                 <h2>About the app</h2>
                 <p>This app can recognize handwritten hebrew letters without sofits. Draw a letter on the canvas above and press the "Predict" button to see a prediction. Press the "Clear" button to clear the canvas and draw a letter again. "Show more information" button reveals detailed predictions by all models.</p>
-                <a href='https://st2.korni.co.il/files/for_site/free/propisi.pdf.pdf'>Prescription</a>
+                <a target="_blank" href='https://st2.korni.co.il/files/for_site/free/propisi.pdf.pdf'>Prescription</a>
             </div>
             <div class="col-md-4">
                 <h2>Collecting the data</h2>
                 <p>The drawn image is saved in a temporary folder which is emptied at the end of each session. By default, the drawn image is used to additionally train models and futher improve the prediction quality. If you don't want this to happen, uncheck the flag below and no information will be collected.</p><br>
                 <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn letter for model training</label>
             </div>
-            <div class="col-md-4" style="display: none;">
-                <h2>Models performance</h2>
-                <table class="table">
-					<thead>
-						<tr>
-							<th>Model</th>
-							<th>MNIST accuracy</th>
-							<th>Worst predicted digit</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>FNN</td>
-							<td id="fnn_mnist">58.95%</td>
-							<td id="fnn_bad_digit">9 (14.57%)</td>
-						</tr>
-						<tr>
-							<td>Trained FNN</td>
-							<td id="fnn_t_mnist">62.13%</td>
-							<td id="fnn_t_bad_digit">9 (14.37%)</td>
-						</tr>
-						<tr>
-							<td>CNN</td>
-							<td id="cnn_mnist">74.69%</td>
-							<td id="cnn_bad_digit">7 (25.97%)</td>
-						</tr>
-						<tr>
-							<td>CNN trained</td>
-							<td id="cnn_t_mnist">74.27%</td>
-							<td id="cnn_t_bad_digit">9 (29.44%)</td>
-						</tr>
 
-					</tbody>
-				</table>
-            </div>
         </div>
 
         <footer>

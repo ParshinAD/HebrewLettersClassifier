@@ -1,4 +1,4 @@
-//for canvas drawing used code from here: https://github.com/zealerww/digits_recognition/blob/master/digits_recognition/static/draw.js
+//for canvas drawing used code from here: https://github.com/Erlemar/digit-draw-recognize/blob/master/static/draw.js
 var drawing = false;
 var context;
 var offset_left = 0;
@@ -92,7 +92,7 @@ function saveImg()
 	  url: "hook",
 	  data:{
 		imageBase64: dataURL,
-		digit: dig,
+		letter: dig,
 		csrfmiddlewaretoken: "{% csrf_token %}",
 	  },
 	}).done(function(response) {

@@ -1,4 +1,4 @@
-//for canvas drawing used code from here: https://github.com/zealerww/digits_recognition/blob/master/digits_recognition/static/draw.js
+//for canvas drawing used code from here: https://github.com/Erlemar/digit-draw-recognize/blob/master/static/draw.js
 var drawing = false;
 
 var context;
@@ -214,7 +214,7 @@ function clearCanvas() {
     document.getElementById("hide_show_btn").style.display = "none";
     document.getElementById("prediction").style.display = "none";
     document.getElementById("hidable").style.display = "none";
-	document.getElementById("digit_form").style.display = "none";
+	document.getElementById("letter_form").style.display = "none";
     document.getElementById("answer_reaction").innerHTML = "";
     document.getElementById("rec_result").innerHTML = "";
 	document.getElementById("fnn1").style.color = 'gray';
@@ -248,8 +248,8 @@ function positive_pred() {
 	if (document.getElementById("Checkbox").checked == true) {
 		document.getElementById("answer_reaction").innerHTML = "Great! Thank you, the letter will be used to improve the models further.";
 		document.getElementById("prediction").style.display = "none";
-		var digit = document.getElementById("rec_result").innerHTML;
-		var trained = train_model(digit);
+		var letter = document.getElementById("rec_result").innerHTML;
+		var trained = train_model(letter);
 		console.log(trained)
 	} else {
 		document.getElementById("answer_reaction").innerHTML = "Cool! The app works, but you could help improving it by checking the box next time.";
@@ -261,7 +261,7 @@ function negative_pred() {
 	if (document.getElementById("Checkbox").checked == true) {
 		document.getElementById("answer_reaction").innerHTML = "This was an error! Could you please choose the correct letter and submit it?";
 		document.getElementById("prediction").style.display = "none";
-		document.getElementById("digit_form").style.display = "block";
+		document.getElementById("letter_form").style.display = "block";
 	} else {
 		document.getElementById("answer_reaction").innerHTML = "A pity :( If only the models could use this image to correct the error...";
 		document.getElementById("prediction").style.display = "none";
@@ -274,7 +274,7 @@ function nothing() {
 }
 
 function predict() {
-	document.getElementById("digit_form").style.display = "none";
+	document.getElementById("letter_form").style.display = "none";
 	document.getElementById("hidable").style.display = "none";
 	document.getElementById("fnn1").style.color = 'gray';
 	document.getElementById("fnn2").style.color = 'gray';
@@ -313,7 +313,7 @@ function predict() {
 			document.getElementById("prediction").style.display = "none";
 			document.getElementById("hidable").style.display = "none";
 			document.getElementById("answer_reaction").innerHTML = "";
-			document.getElementById("rec_result").innerHTML = response;
+			document.getElementById("rec_result").innerHTML = response['answer'];
 		} else {
 			//answers = response
 			document.getElementById("prediction").style.display = "block";
@@ -331,9 +331,9 @@ function predict() {
 			document.getElementById("cnn1").style.color = 'black';
 			document.getElementById("cnn2").style.color = 'black';
 			document.getElementById("cnn3").style.color = 'black';
-// 			document.getElementById("cnn_t1").style.color = 'black';
-// 			document.getElementById("cnn_t2").style.color = 'black';
-// 			document.getElementById("cnn_t3").style.color = 'black';
+			document.getElementById("cnn_t1").style.color = 'black';
+			document.getElementById("cnn_t2").style.color = 'black';
+			document.getElementById("cnn_t3").style.color = 'black';
 
 			document.getElementById("fnn1").innerHTML = response['fnn'][0];
 			document.getElementById("fnn2").innerHTML = response['fnn'][1];
@@ -344,28 +344,28 @@ function predict() {
 			document.getElementById("cnn1").innerHTML = response['cnn'][0];
 			document.getElementById("cnn2").innerHTML = response['cnn'][1];
 			document.getElementById("cnn3").innerHTML = response['cnn'][2];
-// 			document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
-// 			document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
-// 			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
+			document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
+			document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
+			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
 			document.getElementById("rec_result").innerHTML = response['answer'];
 		}
 	});
 }
 
-function submit_correct_digit()
+function submit_correct_letter()
 {
-	var digit = document.getElementById("digits");
-	var correct_digit = digit.options[digit.selectedIndex].text
-	document.getElementById("digit_form").style.display = "none";
+	var letter = document.getElementById("letters");
+	var correct_letter = letter.options[letter.selectedIndex].text
+	document.getElementById("letter_form").style.display = "none";
 	document.getElementById("answer_reaction").innerHTML = "Thank you! The models should work better now.";
 
-	var trained = train_model(correct_digit);
+	var trained = train_model(correct_letter);
 	console.log(trained)
 
 }
 
-function train_model(digit) {
-	var digit = digit;
+function train_model(letter) {
+	var letter = letter;
 	var canvas = document.getElementById("the_stage");
 	var dataURL = canvas.toDataURL('image/jpg');
 	document.getElementById("rec_result").innerHTML = 'Training...'
@@ -373,7 +373,7 @@ function train_model(digit) {
 		type: "POST",
 		url: "hook3",
 		data:{
-			digit: digit,
+			letter: letter,
 			imageBase64: dataURL,
 			csrfmiddlewaretoken: "{% csrf_token %}"
 		}
@@ -385,6 +385,3 @@ function train_model(digit) {
 
 
 onload = start_canvas;
-
-// https://stackoverflow.com/questions/16057256/draw-on-a-canvas-via-mouse-and-touch
-// https://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html

@@ -1,13 +1,11 @@
 import numpy as np
 from PIL import Image, ImageOps
+import random
 
 np.random.seed(1)
 
 
 # # Initialization for an L-layer Neural Network.
-
-# In[2]:
-
 
 def initialize_parameters_deep(layer_dims):
     """
@@ -37,9 +35,6 @@ def initialize_parameters_deep(layer_dims):
 
 # # Forward Propagation Module
 
-# In[3]:
-
-
 def linear_forward(A, W, b):
     """
     Implement the linear part of a layer's forward propagation.
@@ -59,9 +54,6 @@ def linear_forward(A, W, b):
     cache = (A, W, b)
 
     return Z, cache
-
-
-# In[4]:
 
 
 def linear_activation_forward(A_prev, W, b, activation):
@@ -93,9 +85,6 @@ def linear_activation_forward(A_prev, W, b, activation):
     return A, cache
 
 
-# In[5]:
-
-
 def sigmoid(Z):
     """
     Implements the sigmoid activation in numpy
@@ -112,6 +101,7 @@ def sigmoid(Z):
     cache = Z
 
     return A, cache
+
 
 def relu(Z):
     """
@@ -131,9 +121,6 @@ def relu(Z):
 
     cache = Z
     return A, cache
-
-
-# In[6]:
 
 
 def L_model_forward(X, parameters):
@@ -173,8 +160,6 @@ def L_model_forward(X, parameters):
 
 # # Cost Function
 
-# In[7]:
-
 
 def compute_cost(AL, Y):
     """
@@ -199,8 +184,6 @@ def compute_cost(AL, Y):
 
 # # Backward Propagation Module
 
-# In[8]:
-
 
 def linear_backward(dZ, cache):
     """
@@ -223,9 +206,6 @@ def linear_backward(dZ, cache):
     dA_prev = W.T @ dZ
 
     return dA_prev, dW, db
-
-
-# In[9]:
 
 
 def sigmoid_backward(dA, cache):
@@ -273,9 +253,6 @@ def relu_backward(dA, cache):
     return dZ
 
 
-# In[10]:
-
-
 def linear_activation_backward(dA, cache, activation):
     """
     Implement the backward propagation for the LINEAR->ACTIVATION layer.
@@ -301,9 +278,6 @@ def linear_activation_backward(dA, cache, activation):
         dA_prev, dW, db = linear_backward(dZ, linear_cache)
 
     return dA_prev, dW, db
-
-
-# In[11]:
 
 
 def L_model_backward(AL, Y, caches):
@@ -350,8 +324,6 @@ def L_model_backward(AL, Y, caches):
 
 # # Update Parameters
 
-# In[12]:
-
 
 def update_parameters(params, grads, learning_rate):
     """
@@ -378,8 +350,6 @@ def update_parameters(params, grads, learning_rate):
 
 # # Prediction
 
-# In[361]:
-
 
 def predict(test_df, parameters):
     """
@@ -396,7 +366,6 @@ def predict(test_df, parameters):
     X, Y = prepare_data(test_df, aug=False)
 
     m = X.shape[1]
-    n = len(parameters) // 2 # number of layers in the neural network
 
     # Forward propagation
     probas, caches = L_model_forward(X, parameters)
@@ -411,8 +380,6 @@ def predict(test_df, parameters):
 
 
 # # L-layer Neural Network
-
-# In[351]:
 
 
 def L_layer_model(train_df, test_df, layers_dims, learning_rate = 0.0075, num_iterations = 3000, print_cost=False):
@@ -471,8 +438,6 @@ def L_layer_model(train_df, test_df, layers_dims, learning_rate = 0.0075, num_it
 
 # # data processing
 
-# In[348]:
-
 
 def prepare_data(df, aug=True):
     X = df.image
@@ -492,9 +457,6 @@ def prepare_data(df, aug=True):
     return X, Y
 
 
-# In[318]:
-
-
 def rotate_img(img, angle, bg_patch=(5,5)):
     assert len(img.shape) <= 3, "Incorrect image shape"
     rgb = len(img.shape) == 3
@@ -502,13 +464,10 @@ def rotate_img(img, angle, bg_patch=(5,5)):
         bg_color = np.mean(img[:bg_patch[0], :bg_patch[1], :], axis=(0,1))
     else:
         bg_color = np.mean(img[:bg_patch[0], :bg_patch[1]])
-    img = rotate(img, angle, reshape=False)
+    img = rotate(img, angle, reshape=False) # from scipy.ndimage import rotate
     mask = [img <= 0, np.any(img <= 0, axis=-1)][rgb]
     img[mask] = bg_color
     return img
-
-
-# In[319]:
 
 
 def process_image(img):
