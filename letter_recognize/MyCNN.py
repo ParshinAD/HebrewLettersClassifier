@@ -741,7 +741,7 @@ def CNN_train_on_one_image(image, parameters, Y, learning_rate=0.0025):
     img = np.expand_dims(img, 0)
 
     # Forward propagation
-    model = ConvNet1(input_dimension=(28, 28, 1), weight_scale=1e-2, hidden_dimension=100, number_of_classes=22)
+    model = ConvNet1(input_dimension=(28, 28, 1), weight_scale=1e-2, hidden_dimension=100, number_of_classes=22, regularization=1e-3)
     model.params = parameters
     train_step_CNN(img, [Y], model, adam, learning_rate)
 
