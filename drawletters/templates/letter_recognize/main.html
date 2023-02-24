@@ -140,13 +140,90 @@
         <div class="row">
             <div class="col-md-4">
                 <h2>About the app</h2>
-                <p>This app can recognize handwritten hebrew letters without sofits. Draw a letter on the canvas above and press the "Predict" button to see a prediction. Press the "Clear" button to clear the canvas and draw a letter again. "Show more information" button reveals detailed predictions by all models.</p>
-                <a target="_blank" href='https://st2.korni.co.il/files/for_site/free/propisi.pdf.pdf'>Prescription</a>
+                <p>This app can recognize handwritten hebrew letters. Draw a letter on the canvas above and press the "Predict" button to see a prediction. Press the "Clear" button to clear the canvas and draw a letter again. "Show more information" button reveals detailed predictions by all models. If you don't know hebrew alphabet, press the "Letters" button below.</p>
             </div>
             <div class="col-md-4">
                 <h2>Collecting the data</h2>
-                <p>The drawn image is saved in a temporary folder which is emptied at the end of each session. By default, the drawn image is used to additionally train models and futher improve the prediction quality. If you don't want this to happen, uncheck the flag below and no information will be collected.</p><br>
+                <p>The training images were collected using a special small application and stored in AWS s3. Here, by default, the drawn image is used for additional model training and further improvement of the prediction quality. If you do not want this to happen, uncheck the box below and no information will be collected.</p><br>
                 <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn letter for model training</label>
+            </div>
+            <div class="col-md-4" id="draw_examples">
+                <button type="button" class="btn btn-default butt butt_absolute" onclick="showExamples()">Letters</button>
+                <br>
+                <br>
+                <div class="col-md-7 letter_exampls" id='show_examples'>
+							<table class='table'>
+								<tbody>
+								    <tr>
+										<td>Alef</td>
+										<td>Bet </td>
+										<td>Gimel </td>
+										<td>Dalet </td>
+										<td>He </td>
+										<td>Vav </td>
+										<td>Zayin </td>
+										<td>Chet </td>
+										<td>Tet </td>
+									</tr>
+									<tr>
+										<td> <img src="{% static 'letter_examples/alef.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/bet.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/gimel.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/dalet.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/he.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/vav.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/zeyin.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/chet.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/tet.jpg' %}" alt=""></td>
+									</tr>
+									<tr>
+										<td>Yod </td>
+										<td>Kaf </td>
+										<td>Kaf sofit </td>
+										<td>Lamed </td>
+									    <td>Mem </td>
+									    <td>Mem sofit </td>
+									    <td>Nun </td>
+									    <td>Nun sofit </td>
+									    <td>Samech </td>
+									</tr>
+									<tr>
+										<td> <img src="{% static 'letter_examples/yod.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/kaf.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/kaf_sofit.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/lamed.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/mem.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/mem_sofit.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/nun.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/nun_sofit.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/samech.jpg' %}" alt=""></td>
+									</tr>
+									<tr>
+									    <td>Ayin </td>
+									    <td>Pe </td>
+									    <td>Pe sofit </td>
+									    <td>Tsadi </td>
+									    <td>Tsadi sofit </td>
+									    <td>Qof </td>
+									    <td>Resh </td>
+									    <td>Shin </td>
+									    <td>Tav </td>
+									</tr>
+									<tr>
+									    <td> <img src="{% static 'letter_examples/ayin.jpg' %}" alt=""></td>
+									    <td> <img src="{% static 'letter_examples/pe.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/pe_sofit.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/tsadi.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/tsadi_sofit.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/qof.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/resh.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/shin.jpg' %}" alt=""></td>
+										<td> <img src="{% static 'letter_examples/tav.jpg' %}" alt=""></td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
             </div>
 
         </div>
