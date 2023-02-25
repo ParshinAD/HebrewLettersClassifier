@@ -80,6 +80,11 @@ def linear_activation_forward(A_prev, W, b, activation):
         Z, linear_cache = linear_forward(A_prev, W, b)
         A, activation_cache = relu(Z)
 
+    elif activation == "softmax":
+        Z, linear_cache = linear_forward(A_prev, W, b)
+        A, activation_cache = softmax(Z)
+
+
     cache = (linear_cache, activation_cache)
 
     return A, cache
@@ -123,7 +128,28 @@ def relu(Z):
     return A, cache
 
 
-def L_model_forward(X, parameters):
+def softmax(Z):
+    """
+    Implement the softmax function.
+
+    Arguments:
+    Z -- Output of the linear layer, of any shape
+
+    Returns:
+    A -- Post-activation parameter, of the same shape as Z
+    cache -- a python dictionary containing "A" ; stored for computing the backward pass efficiently
+    """
+
+    A = np.exp(Z - Z.max())
+    A = A / np.sum(A)
+
+    assert(A.shape == Z.shape)
+
+    cache = Z
+    return A, cache
+
+
+def L_model_forward(X, parameters, last_activation='sigmoid'):
     """
     Implement forward propagation for the [LINEAR->RELU]*(L-1)->LINEAR->SIGMOID computation
 
@@ -152,7 +178,7 @@ def L_model_forward(X, parameters):
     A_prev = A
     W = parameters['W' + str(L)]
     b = parameters['b' + str(L)]
-    AL, cache = linear_activation_forward(A_prev=A_prev, W=W, b=b, activation='sigmoid')
+    AL, cache = linear_activation_forward(A_prev=A_prev, W=W, b=b, activation=last_activation)
     caches.append(cache)
 
     return AL, caches

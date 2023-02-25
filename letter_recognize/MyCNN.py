@@ -683,6 +683,23 @@ class Train(object):
             pickle.dump(history_dictionary, f)
 
 
+def softmax(Z):
+    """
+    Implement the softmax function.
+
+    Arguments:
+    Z -- Output of the linear layer, of any shape
+
+    Returns:
+    A -- Post-activation parameter, of the same shape as Z
+    """
+
+    A = np.exp(Z - Z.max())
+    A = A / np.sum(A)
+
+    return A
+
+
 def download_local_image(filename, folder='../data/'):
         imageFile = Image.open(folder + filename)
         return imageFile
@@ -731,8 +748,8 @@ def CNN_predict_on_one_image(image, parameters):
     model.params = parameters
     scores = model.scores_for_predicting(img)
 
-    p = scores.argmax(axis=0)
-    return scores
+    p = softmax(scores)
+    return p
 
 
 def CNN_train_on_one_image(image, parameters, Y, learning_rate=0.0001):

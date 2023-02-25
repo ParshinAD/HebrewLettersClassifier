@@ -385,12 +385,7 @@ function train_model(letter) {
 
 function showExamples()
 {
-    var show_examples = document.getElementById("show_examples").style.display;
-    if (show_examples == 'block'){
-        document.getElementById("show_examples").style.display = 'none'
-    } else {
-        document.getElementById("show_examples").style.display = 'block'
-    }
+    document.getElementById("show_examples").classList.toggle('move_panel')
 }
 
 
